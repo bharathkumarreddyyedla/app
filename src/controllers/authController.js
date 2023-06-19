@@ -16,7 +16,12 @@ export const register = async (req, res) => {
       registeredDate: new Date(),
     });
     const result = await newUser.save();
-    res.status(200).json(result);
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch)
+    //   return res.status(200).json({ error: "Invalid credentials." });
+
+    const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET);
+    res.status(200).json({ token, result });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -28,10 +33,10 @@ export const login = async (req, res) => {
     if (!user) return res.status(400).json({ error: "User not found." });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
-      return res.status(400).json({ error: "Invalid credentials." });
+      return res.status(200).json({ error: "Invalid credentials." });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    
+
     return res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json({ error: err });

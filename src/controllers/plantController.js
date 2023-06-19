@@ -1,5 +1,6 @@
 import Plant from "../models/plant.js";
 import User from "../models/user.js";
+import axios from "axios";
 
 export const savePlant = async (req, res) => {
   try {
@@ -63,6 +64,30 @@ export const getPlantsByUser = async (req, res) => {
       userId: userId,
     });
     res.status(200).json(plants);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+export const getAllPlantsFromPerenual = async (req, res) => {
+  try {
+    const { page } = req.params;
+    const plant = await axios.get(
+      `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}`
+    );
+    page;
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+export const getPlantFromPerenualById = async (req, res) => {
+  try {
+    const { id, page } = req.params;
+    const plant = await axios.get(
+      `https://perenual.com/api/species/details/${id}?key=${process.env.PERENUAL_API_KEY}`
+    );
+    res.status(200).json(plant.data);
   } catch (error) {
     res.status(500).json({ error: error });
   }
