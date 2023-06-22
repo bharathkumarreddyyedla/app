@@ -22,7 +22,32 @@ app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+  })
+);
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
+  next();
+});
+app.options("*", cors());
+var allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,POST,DELETE,PATCH,UPDATE"
+  );
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+
+  next();
+};
+app.use(allowCrossDomain);
 app.use("/assets", express.static(path.join(dirName, "public/assets")));
 
 // Routes //

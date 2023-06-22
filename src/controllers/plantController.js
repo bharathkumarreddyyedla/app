@@ -92,3 +92,38 @@ export const getPlantFromPerenualById = async (req, res) => {
     res.status(500).json({ error: error });
   }
 };
+
+// export const getSeasonalPlants = async (req, res) => {
+//   try {
+//     const { season, page } = req.params;
+//     const plant = await axios.get(
+//       `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&flowering_season=${season}`
+//     );
+//     res.status(200).json(plant.data);
+//   } catch (error) {
+//     res.status(500).json({ error: error });
+//   }
+// };
+// https://perenual.com/api/species-care-guide-list?key=sk-jv5x648ec5b40c2691300
+export const getSeasonalPlants = async (req, res) => {
+  try {
+    const { season, page } = req.params;
+    const plant = await axios.get(
+      `https://perenual.com/api/species-care-guide-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&Type=${season}`
+    );
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+export const searchPlants = async (req, res) => {
+  try {
+    const { keyword, page } = req.params;
+    const plant = await axios.get(
+      `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&q=${keyword}`
+    );
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};

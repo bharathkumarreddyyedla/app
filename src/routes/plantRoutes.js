@@ -5,7 +5,9 @@ import {
   getAllPlantsFromPerenual,
   getPlantFromPerenualById,
   getPlantsByUser,
+  getSeasonalPlants,
   savePlant,
+  searchPlants,
   updatePlant,
 } from "../controllers/plantController.js";
 
@@ -24,5 +26,7 @@ router.get(
   verifyToken,
   getPlantFromPerenualById
 );
+router.get("/getSeasonalPlants/:page/:season", verifyToken, getSeasonalPlants);
+router.get("/searchPlants/:page/:keyword", verifyToken, searchPlants);
 
 export default router;
