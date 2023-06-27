@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
+    notificationEnabled: {
+      type: Boolean,
+      default: false,
+    },
     location: String,
     registeredDate: Date,
   },

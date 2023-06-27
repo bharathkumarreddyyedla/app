@@ -127,3 +127,26 @@ export const searchPlants = async (req, res) => {
     res.status(500).json({ error: error });
   }
 };
+export const filterPlants = async (req, res) => {
+  try {
+    const { page, cycle, watering, sunlight } = req.params;
+    let api = "";
+    if (cycle && watering && sunlight) {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&Cycle=${cycle}&Watering=${watering}&Sunlight=${sunlight}`;
+    }
+    const plant = await axios.get(api);
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+export const plantsFAQ = async (req, res) => {
+  try {
+    const plant = await axios.get(
+      `https://perenual.com/api/article-faq-list?key=${process.env.PERENUAL_API_KEY}`
+    );
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};

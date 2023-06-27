@@ -1,11 +1,13 @@
 import express from "express";
 import { verifyToken } from "../services/tokenValidation.js";
 import {
+  filterPlants,
   getAllPlants,
   getAllPlantsFromPerenual,
   getPlantFromPerenualById,
   getPlantsByUser,
   getSeasonalPlants,
+  plantsFAQ,
   savePlant,
   searchPlants,
   updatePlant,
@@ -28,5 +30,11 @@ router.get(
 );
 router.get("/getSeasonalPlants/:page/:season", verifyToken, getSeasonalPlants);
 router.get("/searchPlants/:page/:keyword", verifyToken, searchPlants);
+router.get(
+  "/filterPlants/:page/:cycle/:watering/:sunlight",
+  verifyToken,
+  filterPlants
+);
+router.get("/plantFAQ", verifyToken, plantsFAQ);
 
 export default router;
