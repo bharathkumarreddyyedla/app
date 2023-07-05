@@ -11,13 +11,14 @@ import authRoutes from "./src/routes/authRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import plantRoutes from "./src/routes/plantRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
+import notificationRoutes from "./src/routes/notificationRoutes.js";
 
 // Configurations //
 const fileName = fileURLToPath(import.meta.url);
 const dirName = path.dirname(fileName);
 dotenv.config();
 const app = express();
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -55,6 +56,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/plant", plantRoutes);
 app.use("/post", postRoutes);
+app.use("/notification", notificationRoutes);
 
 // MongoDb setup //
 const PORT = process.env.PORT || 6001;

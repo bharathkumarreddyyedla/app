@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema(
     },
     location: String,
     registeredDate: Date,
+    deviceToken:{
+      type:String,
+      default:''
+    }
   },
   { timestamps: true }
 );

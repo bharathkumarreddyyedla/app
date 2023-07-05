@@ -31,7 +31,7 @@ router.get(
 router.get("/getSeasonalPlants/:page/:season", verifyToken, getSeasonalPlants);
 router.get("/searchPlants/:page/:keyword", verifyToken, searchPlants);
 router.get(
-  "/filterPlants/:page/:cycle/:watering/:sunlight",
+  "/filterPlants/:page/:cycle/:watering/:sunlight/:edible/:indoor/:poisonous/:hardiness",
   verifyToken,
   filterPlants
 );

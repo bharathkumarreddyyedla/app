@@ -5,25 +5,53 @@ const plantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  perenulaPlantId: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  plantDob: {
+    type: Date,
+    required: true,
+  },
+  plantLat: {
+    type: Number,
+    required: true,
+  },
+  plantLong: {
+    type: Number,
+    required: true,
+  },
   plantName: {
     type: String,
     required: true,
     min: 2,
     max: 50,
   },
+  scientific_name: {
+    type: Array,
+    required: true,
+  },
+  dimension: {
+    type: String,
+    required: false,
+    default: "",
+  },
   plantDescription: {
     type: String,
     required: true,
     min: 2,
-    max: 300,
+    max: 1000,
   },
   city: {
     type: String,
-    required: true,
+    required: false,
+    default: "",
   },
   state: {
     type: String,
-    required: true,
+    required: false,
+    default: "",
   },
   platPosition: {
     type: String,
@@ -33,13 +61,45 @@ const plantSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  plantPicture: {
+  plantPicture:{
+    type:String,
+    required:true,
+  },
+  plantProgress: {
     type: Array,
     required: true,
+  },
+  sunlight: {
+    type: Array,
+    required: true,
+  },
+  edible_leaf: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  indoor: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  watering: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  maintenance: {
+    type: String,
+    required: false,
+    default: "",
   },
   createdPlantData: {
     type: Date,
     default: "",
+  },
+  reminders: {
+    type: String,
+    default: "MONTHLY",
   },
 });
 

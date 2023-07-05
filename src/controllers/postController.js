@@ -36,9 +36,9 @@ export const getPostsByUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-     user.posts = posts;
+    user.posts = posts;
     const { password, ...filteredUser } = user.toObject();
-   
+
     res.status(200).json(filteredUser);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -82,5 +82,29 @@ export const updatePostsByUser = async (req, res) => {
     return res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+};
+export const savePost = async (payload, plantData) => {
+  try {
+    const { userId } = payload;
+    const user = await User.findById(userId);
+    if (!user) {
+      return { error: "User not found" };
+    }
+    const plants = await Plant.findById(plantData?._id);
+    if (!plants) {
+      return { error: "Plant not found" };
+    }
+    const newPost = new Posts({
+      userId,
+      plantId: plantData?._id,
+      postedDate: new Date(),
+      postedTime: new Date(),
+      likes: 0,
+    });
+    const result = await newPost.save();
+    return { meesage: "Posted successfully" };
+  } catch (error) {
+    return { error: error };
   }
 };
