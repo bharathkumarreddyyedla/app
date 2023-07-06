@@ -210,16 +210,31 @@ export const filterPlants = async (req, res) => {
   try {
     const {
       page,
-      cycle,
-      watering,
-      sunlight,
-      edible,
-      indoor,
-      poisonous,
-      hardiness,
+      cycle = "",
+      watering = "",
+      sunlight = "",
+      edible = null,
+      indoor = null,
+      poisonous = null,
     } = req.params;
-    let api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&watering=${watering}&sunlight=${sunlight}`;
-    // &indoor=${indoor}&poisonous=${poisonous}&hardiness=${hardiness}
+    let api = "";
+    if (cycle !== "NA" && watering !== "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&watering=${watering}&sunlight=${sunlight}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle !== "NA" && watering !== "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&watering=${watering}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle !== "NA" && watering === "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&sunlight=${sunlight}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle === "NA" && watering !== "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&watering=${watering}&sunlight=${sunlight}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle !== "NA" && watering === "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle === "NA" && watering === "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle === "NA" && watering !== "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&watering=${watering}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    } else if (cycle === "NA" && watering === "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&sunlight=${sunlight}&poisonous=${poisonous}&indoor=${indoor}&edible=${edible}`;
+    }
     const plant = await axios.get(api);
     res.status(200).json(plant.data);
   } catch (error) {
@@ -231,6 +246,42 @@ export const plantsFAQ = async (req, res) => {
     const plant = await axios.get(
       `https://perenual.com/api/article-faq-list?key=${process.env.PERENUAL_API_KEY}`
     );
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+export const indoorPlantsFAQ = async (req, res) => {
+  try {
+    const {
+      page,
+      cycle = "",
+      watering = "",
+      sunlight = "",
+      indoor = null,
+    } = req.params;
+    let api = "";
+    if (cycle !== "NA" && watering !== "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&watering=${watering}&sunlight=${sunlight}&indoor=${indoor}`;
+    } else if (cycle !== "NA" && watering !== "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&watering=${watering}&indoor=${indoor}`;
+    } else if (cycle !== "NA" && watering === "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&sunlight=${sunlight}&indoor=${indoor}`;
+    } else if (cycle === "NA" && watering !== "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&watering=${watering}&sunlight=${sunlight}&indoor=${indoor}`;
+    } else if (cycle !== "NA" && watering === "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&cycle=${cycle}&indoor=${indoor}`;
+    } else if (cycle === "NA" && watering === "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&indoor=${indoor}`;
+    } else if (cycle === "NA" && watering !== "NA" && sunlight === "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&watering=${watering}&indoor=${indoor}`;
+    } else if (cycle === "NA" && watering === "NA" && sunlight !== "NA") {
+      api = `https://perenual.com/api/species-list?page=${page}&key=${process.env.PERENUAL_API_KEY}&sunlight=${sunlight}&indoor=${indoor}`;
+    }
+    console.log("api", api);
+    const plant = await axios.get(api);
+    console.log("plant", plant.data);
     res.status(200).json(plant.data);
   } catch (error) {
     res.status(500).json({ error: error });

@@ -7,6 +7,7 @@ import {
   getPlantFromPerenualById,
   getPlantsByUser,
   getSeasonalPlants,
+  indoorPlantsFAQ,
   plantsFAQ,
   savePlant,
   searchPlants,
@@ -31,10 +32,15 @@ router.get(
 router.get("/getSeasonalPlants/:page/:season", verifyToken, getSeasonalPlants);
 router.get("/searchPlants/:page/:keyword", verifyToken, searchPlants);
 router.get(
-  "/filterPlants/:page/:cycle/:watering/:sunlight/:edible/:indoor/:poisonous/:hardiness",
+  "/filterPlants/:page/:cycle/:watering/:sunlight/:poisonous/:indoor/:edible",
   verifyToken,
   filterPlants
 );
 router.get("/plantFAQ", verifyToken, plantsFAQ);
+router.get(
+  "/indoorPlantFAQ/:page/:cycle/:watering/:sunlight/:indoor",
+  verifyToken,
+  indoorPlantsFAQ
+);
 
 export default router;
