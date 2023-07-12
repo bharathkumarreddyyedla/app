@@ -8,7 +8,6 @@ const plantSchema = new mongoose.Schema({
   perenulaPlantId: {
     type: Number,
     required: true,
-    unique: true,
   },
   plantDob: {
     type: Date,
@@ -27,6 +26,10 @@ const plantSchema = new mongoose.Schema({
     required: true,
     min: 2,
     max: 50,
+  },
+  cycle: {
+    type: String,
+    required: true,
   },
   scientific_name: {
     type: Array,
@@ -61,9 +64,9 @@ const plantSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  plantPicture:{
-    type:String,
-    required:true,
+  plantPicture: {
+    type: String,
+    required: true,
   },
   plantProgress: {
     type: Array,
@@ -99,7 +102,7 @@ const plantSchema = new mongoose.Schema({
   },
   reminders: {
     type: String,
-    default: "MONTHLY",
+    default: "DAILY",
   },
 });
 

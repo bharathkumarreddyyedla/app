@@ -12,6 +12,7 @@ import userRoutes from "./src/routes/userRoutes.js";
 import plantRoutes from "./src/routes/plantRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
 import notificationRoutes from "./src/routes/notificationRoutes.js";
+import favouriteRoutes from "./src/routes/favouriteRoutes.js";
 
 // Configurations //
 const fileName = fileURLToPath(import.meta.url);
@@ -57,6 +58,7 @@ app.use("/user", userRoutes);
 app.use("/plant", plantRoutes);
 app.use("/post", postRoutes);
 app.use("/notification", notificationRoutes);
+app.use("/favourite", favouriteRoutes);
 
 // MongoDb setup //
 const PORT = process.env.PORT || 6001;

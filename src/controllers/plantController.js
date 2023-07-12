@@ -15,6 +15,7 @@ export const savePlant = async (req, res) => {
       plantLong,
       plantDob,
       plantName,
+      cycle,
       plantDescription,
       scientific_name,
       dimension,
@@ -30,13 +31,18 @@ export const savePlant = async (req, res) => {
       plantProgress,
       reminders,
     } = req.body;
-    console.log("req", req?.body);
+    // console.log("req", req?.body);
     let shareSocialFeed = share;
     const user = await User.findById(userId);
-    console.log("share", share);
+    // console.log("share", share);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+    user.plants.map(async (item) => {
+      if (item?.perenulaPlantId == perenulaPlantId) {
+        return res.status(200).json({ error: "You already added this plant" });
+      }
+    });
 
     const newPlant = new Plant({
       userId,
@@ -45,6 +51,7 @@ export const savePlant = async (req, res) => {
       plantLong,
       plantDob,
       plantName,
+      cycle,
       plantDescription,
       scientific_name,
       dimension,
@@ -62,7 +69,9 @@ export const savePlant = async (req, res) => {
       reminders,
       createdPlantData: new Date(),
     });
+
     const result = await newPlant.save();
+    // console.log("result", result);
     if (reminders) {
       saveReminder(req.body, result).then((res) => {
         console.log("reminder result", res);
@@ -91,6 +100,7 @@ export const savePlant = async (req, res) => {
       });
     res.status(200).json({ message: "Plant saved successfully" });
   } catch (error) {
+    console.log("error", error?.message);
     res.status(500).json({ error: error });
   }
 };
