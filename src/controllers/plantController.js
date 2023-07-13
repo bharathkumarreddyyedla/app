@@ -4,6 +4,7 @@ import axios from "axios";
 import { saveReminder } from "./remindersController.js";
 import { savePost } from "./postController.js";
 import { sendNotificationToExpo } from "../services/notificationService.js";
+import Favourite from "../models/favourites.js";
 
 export const savePlant = async (req, res) => {
   try {
@@ -172,11 +173,20 @@ export const getAllPlantsFromPerenual = async (req, res) => {
 
 export const getPlantFromPerenualById = async (req, res) => {
   try {
-    const { id, page } = req.params;
+    const { id, userId, page } = req.params;
     const plant = await axios.get(
       `https://perenual.com/api/species/details/${id}?key=${process.env.PERENUAL_API_KEY}`
     );
-    res.status(200).json(plant.data);
+    const findFavourite = await Favourite.find({
+      userId: userId,
+      perenulaPlantId: id,
+    });
+    res
+      .status(200)
+      .json({
+        ...plant.data,
+        favourite: findFavourite?.length > 0 ? true : false,
+      });
   } catch (error) {
     res.status(500).json({ error: error });
   }

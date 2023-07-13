@@ -25,7 +25,7 @@ router.get(
   getAllPlantsFromPerenual
 );
 router.get(
-  "/getPlantFromPerenualById/:id",
+  "/getPlantFromPerenualById/:id/:userId",
   verifyToken,
   getPlantFromPerenualById
 );
