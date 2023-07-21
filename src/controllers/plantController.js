@@ -170,7 +170,18 @@ export const getAllPlantsFromPerenual = async (req, res) => {
     res.status(500).json({ error: error });
   }
 };
-
+export const getSeasonPlantFromPerenual = async (req, res) => {
+  try {
+    const { page, indoor = 1 } = req.params;
+    const plant = await axios.get(
+      `https://perenual.com/api/species-list?page=${page}&indoor=${indoor}&key=${process.env.PERENUAL_API_KEY}`
+    );
+    page;
+    res.status(200).json(plant.data);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
 export const getPlantFromPerenualById = async (req, res) => {
   try {
     const { id, userId, page } = req.params;
@@ -181,12 +192,10 @@ export const getPlantFromPerenualById = async (req, res) => {
       userId: userId,
       perenulaPlantId: id,
     });
-    res
-      .status(200)
-      .json({
-        ...plant.data,
-        favourite: findFavourite?.length > 0 ? true : false,
-      });
+    res.status(200).json({
+      ...plant.data,
+      favourite: findFavourite?.length > 0 ? true : false,
+    });
   } catch (error) {
     res.status(500).json({ error: error });
   }

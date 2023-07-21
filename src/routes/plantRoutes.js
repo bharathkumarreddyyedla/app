@@ -6,6 +6,7 @@ import {
   getAllPlantsFromPerenual,
   getPlantFromPerenualById,
   getPlantsByUser,
+  getSeasonPlantFromPerenual,
   getSeasonalPlants,
   indoorPlantsFAQ,
   plantsFAQ,
@@ -23,6 +24,11 @@ router.get(
   "/getAllPlantFromPerenual/:page",
   verifyToken,
   getAllPlantsFromPerenual
+);
+router.get(
+  "/getSeasonPlantFromPerenual/:page/:indoor",
+  verifyToken,
+  getSeasonPlantFromPerenual
 );
 router.get(
   "/getPlantFromPerenualById/:id/:userId",

@@ -1,3 +1,4 @@
+import Favourite from "../models/favourites.js";
 import Plant from "../models/plant.js";
 import Posts from "../models/posts.js";
 import User from "../models/user.js";
@@ -129,19 +130,26 @@ export const getAllPosts = async (req, res) => {
     const updatedUsers = await Promise.all(
       users.map(async (user) => {
         const userPosts = await Posts.find({ userId: user._id });
-        let postsObject =
-          userPosts?.length > 0 ? userPosts[userPosts?.length - 1] : userPosts;
-        if (Object.keys(postsObject).length > 0) {
-          const liked = postsObject.likedBy?.includes(userId);
-          postsObject.likes = postsObject.likedBy.length;
-          postsObject.liked = liked;
-        }
-        user.posts = postsObject;
+        console.log("userPosts", userPosts);
+        let arr = [];
+        let postaArray = [...userPosts];
 
-        const plantid =
-          userPosts?.length > 0 ? userPosts[userPosts?.length - 1] : userPosts;
-        const userPlants = await Plant.findById(plantid?.plantId);
-        user.plants = userPlants;
+        for (let i = 0; i < postaArray?.length; i++) {
+          const userPlants = await Plant.findById(postaArray[i]?.plantId);
+          const findFavourite = await Favourite.find({
+            userId: userId,
+            perenulaPlantId: userPlants?.perenulaPlantId,
+          });
+          const liked = postaArray[i]?.likedBy?.includes(userId);
+          postaArray[i].likes = postaArray[i].likedBy.length;
+          postaArray[i].liked = liked;
+          arr?.push({
+            post: postaArray[i],
+            plant: userPlants,
+            favourite: findFavourite?.length > 0 ? true : false,
+          });
+        }
+        user.posts = arr;
         return user;
       })
     );
@@ -151,7 +159,7 @@ export const getAllPosts = async (req, res) => {
       return filteredUser;
     });
     const newPosts = filteredUsers?.filter((i) => i?.posts?.length > 0);
-    res.status(200).json(newPosts);
+    res.status(200).json(filteredUsers);
   } catch (error) {
     res.status(500).json({ error: error });
   }

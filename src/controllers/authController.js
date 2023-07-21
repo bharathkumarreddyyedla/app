@@ -15,13 +15,13 @@ export const register = async (req, res) => {
       location: "",
       registeredDate: new Date(),
     });
-    const result = await newUser.save();
+    const user = await newUser.save();
     // const isMatch = await bcrypt.compare(password, user.password);
     // if (!isMatch)
     //   return res.status(200).json({ error: "Invalid credentials." });
 
-    const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET);
-    res.status(200).json({ token, result });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.status(200).json({ token, user });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
