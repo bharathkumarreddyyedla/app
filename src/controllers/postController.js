@@ -54,16 +54,18 @@ export const getPostsByUser = async (req, res) => {
       });
       const liked = postaArray[i]?.likedBy?.includes(userId);
       console.log("liked", liked, postaArray[i]?.likedBy, userId);
-      const progessObj = {
-        ...progressPlants.toObject(),
-        firstName: postUser.firstName,
-        profilePicture: postUser.profilePicture,
-        postId: postaArray[i]?._id,
-        likes: postaArray[i].likedBy.length,
-        liked: liked,
-        favourite: findFavourite?.length > 0 ? true : false,
-      };
-      progressArray.push(progessObj);
+      if (progressPlants) {
+        const progessObj = {
+          ...progressPlants.toObject(),
+          firstName: postUser.firstName,
+          profilePicture: postUser.profilePicture,
+          postId: postaArray[i]?._id,
+          likes: postaArray[i].likedBy.length,
+          liked: liked,
+          favourite: findFavourite?.length > 0 ? true : false,
+        };
+        progressArray.push(progessObj);
+      }
     }
 
     return res.status(200).json(progressArray);
@@ -93,16 +95,18 @@ export const getLikedPostsByUser = async (req, res) => {
           perenulaPlantId: userPlants?.perenulaPlantId,
         });
         if (liked) {
-          const progessObj = {
-            ...progressPlants.toObject(),
-            firstName: postUser.firstName,
-            profilePicture: postUser.profilePicture,
-            postId: post?._id,
-            likes: post.likedBy.length,
-            liked: liked,
-            favourite: findFavourite?.length > 0 ? true : false,
-          };
-          progressArray.push(progessObj);
+          if (progressPlants) {
+            const progessObj = {
+              ...progressPlants.toObject(),
+              firstName: postUser.firstName,
+              profilePicture: postUser.profilePicture,
+              postId: post?._id,
+              likes: post.likedBy.length,
+              liked: liked,
+              favourite: findFavourite?.length > 0 ? true : false,
+            };
+            progressArray.push(progessObj);
+          }
           return progressArray;
         }
       })
@@ -135,17 +139,19 @@ export const getAllPosts = async (req, res) => {
           const progressPlants = await Progress.findById(
             postaArray[i].progressId
           );
-          const progessObj = {
-            ...progressPlants.toObject(),
-            firstName: user.firstName,
-            profilePicture: user.profilePicture,
-            postId: postaArray[i]?._id,
-            likes: postaArray[i].likedBy.length,
-            liked: liked,
-            favourite: findFavourite?.length > 0 ? true : false,
-          };
-          console.log("progessObj", progessObj);
-          progressArray.push(progessObj);
+          if (progressPlants) {
+            const progessObj = {
+              ...progressPlants.toObject(),
+              firstName: user.firstName,
+              profilePicture: user.profilePicture,
+              postId: postaArray[i]?._id,
+              likes: postaArray[i].likedBy.length,
+              liked: liked,
+              favourite: findFavourite?.length > 0 ? true : false,
+            };
+            console.log("progessObj", progessObj);
+            progressArray.push(progessObj);
+          }
         }
 
         return progressArray;
