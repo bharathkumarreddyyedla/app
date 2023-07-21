@@ -1,18 +1,23 @@
 import express from "express";
 import { verifyToken } from "../services/tokenValidation.js";
 import {
+  deletePlantProgress,
   filterPlants,
   getAllPlants,
   getAllPlantsFromPerenual,
   getPlantFromPerenualById,
+  getPlantProgress,
   getPlantsByUser,
+  getPlantsByUserAndId,
   getSeasonPlantFromPerenual,
   getSeasonalPlants,
   indoorPlantsFAQ,
   plantsFAQ,
   savePlant,
+  savePlantProgress,
   searchPlants,
   updatePlant,
+  updatePlantProgress,
 } from "../controllers/plantController.js";
 
 const router = express.Router();
@@ -20,6 +25,11 @@ router.post("/addPlant", verifyToken, savePlant);
 router.put("/updatePlant/:id", verifyToken, updatePlant);
 router.get("/getAllPlants", verifyToken, getAllPlants);
 router.get("/getPlantsByUser/:id", verifyToken, getPlantsByUser);
+router.get(
+  "/getPlantsByUserAndId/:userId/:plantId",
+  verifyToken,
+  getPlantsByUserAndId
+);
 router.get(
   "/getAllPlantFromPerenual/:page",
   verifyToken,
@@ -48,5 +58,9 @@ router.get(
   verifyToken,
   indoorPlantsFAQ
 );
+router.post("/savePlantProgress", verifyToken, savePlantProgress);
+router.get("/getPlantProgress/:userId/:plantId", verifyToken, getPlantProgress);
+router.put("/updatePlantProgress/:id", verifyToken, updatePlantProgress);
+router.get("/deletePlantProgress/:id", verifyToken, deletePlantProgress);
 
 export default router;
