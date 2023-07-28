@@ -16,9 +16,6 @@ export const register = async (req, res) => {
       registeredDate: new Date(),
     });
     const user = await newUser.save();
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch)
-    //   return res.status(200).json({ error: "Invalid credentials." });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.status(200).json({ token, user });
@@ -31,12 +28,6 @@ export const login = async (req, res) => {
     const { email, password, deviceToken } = req.body;
     let user = await User.findOne({ email: email });
     if (!user) return res.status(400).json({ error: "User not found." });
-    // user.deviceToken = deviceToken;
-    // let updatedUser = { ...user };
-    // console.log("user", updatedUser);
-    // await User.findByIdAndUpdate(user._id, updatedUser, {
-    //   new: true,
-    // });
     user.deviceToken = deviceToken;
     await user.save();
     const isMatch = await bcrypt.compare(password, user.password);
