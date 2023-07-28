@@ -53,7 +53,6 @@ export const getPostsByUser = async (req, res) => {
         perenulaPlantId: userPlants?.perenulaPlantId,
       });
       const liked = postaArray[i]?.likedBy?.includes(userId);
-      console.log("liked", liked, postaArray[i]?.likedBy, userId);
       if (progressPlants) {
         const progessObj = {
           ...progressPlants.toObject(),
@@ -112,7 +111,10 @@ export const getLikedPostsByUser = async (req, res) => {
       })
     );
     const flattenedArray = arr.flat().filter((item) => item);
-    res.status(200).json(flattenedArray);
+    let arrPost = flattenedArray.sort(
+      (a, b) => new Date(b?.progressDate) - new Date(a?.progressDate)
+    );
+    res.status(200).json(arrPost);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -149,7 +151,6 @@ export const getAllPosts = async (req, res) => {
               liked: liked,
               favourite: findFavourite?.length > 0 ? true : false,
             };
-            console.log("progessObj", progessObj);
             progressArray.push(progessObj);
           }
         }
@@ -158,7 +159,10 @@ export const getAllPosts = async (req, res) => {
       })
     );
     const flattenedArray = newPosts.flat();
-    res.status(200).json(flattenedArray);
+    let arr = flattenedArray.sort(
+      (a, b) => new Date(b?.progressDate) - new Date(a?.progressDate)
+    );
+    res.status(200).json(arr);
   } catch (error) {
     res.status(500).json({ error: error });
   }
