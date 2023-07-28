@@ -39,7 +39,6 @@ export const getPostsByUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    // let arr = [];
     let postaArray = [...posts];
     let progressArray = [];
     for (let i = 0; i < postaArray?.length; i++) {
@@ -66,8 +65,11 @@ export const getPostsByUser = async (req, res) => {
         progressArray.push(progessObj);
       }
     }
-
-    return res.status(200).json(progressArray);
+    let arr = progressArray?.sort(
+      (a, b) => new Date(b?.progressDate) - new Date(a?.progressDate)
+    );
+    // console.log("progressArray", progressArray);
+    return res.status(200).json(arr);
   } catch (error) {
     res.status(500).json({ error: error });
   }
