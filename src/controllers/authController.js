@@ -14,6 +14,8 @@ export const register = async (req, res) => {
       password: passwordHash,
       location: "",
       registeredDate: new Date(),
+      oAuthToken: "",
+      registrationType: "MANUAL",
     });
     const user = await newUser.save();
 
@@ -37,6 +39,40 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     return res.status(200).json({ token, user });
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};
+export const googleOAuthLoginOrRegister = async (req, res) => {
+  try {
+    const { email, firstName, oAuthToken, deviceToken } = req.body;
+    const user = await User.findOne({ email: email });
+    let token = "";
+    let newUser = {};
+    if (
+      user?.email === email &&
+      user?.oAuthToken &&
+      registrationType === "GOOGLE"
+    ) {
+      user.deviceToken = deviceToken;
+      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      return res.status(200).json({ token, user });
+    } else {
+      newUser = new User({
+        firstName: firstName,
+        surName: "",
+        email: email,
+        password: "",
+        location: "",
+        registeredDate: new Date(),
+        oAuthToken: oAuthToken,
+        registrationType: "GOOGLE",
+        deviceToken: deviceToken,
+      });
+      const registeredUser = await newUser.save();
+      token = jwt.sign({ id: registeredUser._id }, process.env.JWT_SECRET);
+      return res.status(200).json({ token, registeredUser });
+    }
   } catch (err) {
     res.status(500).json({ error: err });
   }

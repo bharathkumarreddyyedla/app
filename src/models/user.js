@@ -55,6 +55,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    oAuthToken: {
+      type: String,
+      default: "",
+    },
+    registrationType: {
+      type: String,
+      default: "MANUAL",
+    },
   },
   { timestamps: true }
 );
