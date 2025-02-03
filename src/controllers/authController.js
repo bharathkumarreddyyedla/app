@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import { pdf } from "../services/pdf.js";
 
 export const register = async (req, res) => {
   try {
+    console.log("fjhbvhdk ");
     const { firstName, surName = "", email, password } = req.body;
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
@@ -73,6 +75,23 @@ export const googleOAuthLoginOrRegister = async (req, res) => {
       token = jwt.sign({ id: registeredUser._id }, process.env.JWT_SECRET);
       return res.status(200).json({ token, registeredUser });
     }
+  } catch (err) {
+    res.status(500).json({ error: err });
+  }
+};
+export const createPdfFromMakePDF = async (req, res) => {
+  try {
+    console.log("createPdfFromMakePDF called");
+    await pdf(req?.body)
+      .then((pdfData) => {
+        if (pdfData) {
+          return res.status(200).json({ billPdf: pdfData });
+        }
+      })
+      .catch((err) => {
+        console.log("err", err);
+        return res.status(200).json({ error: err });
+      });
   } catch (err) {
     res.status(500).json({ error: err });
   }

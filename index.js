@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(
   cors({
-    origin: "http://localhost:3001",
+    origin: "http://192.168.1.25:3001",
     methods: "GET,POST,PUT,DELETE",
   })
 );
@@ -74,17 +74,24 @@ app.use("/favourite", favouriteRoutes);
 
 // MongoDb setup //
 const PORT = process.env.PORT || 6001;
-mongoose
-  .connect(process.env.MONGO_URL, {
-    connectTimeoutMS: 30000,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server port: ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(`server error: ${error}`);
-  });
+app.listen(PORT, () => {
+  console.log(`Server port: ${PORT}`);
+});
+// mongoose
+//   .connect(process.env.MONGO_URL, {
+//     connectTimeoutMS: 30000,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     // tls: false,
+//     // // tlsAllowInvalidCertificates: true,
+//     // ssl: false,
+//     // // sslValidate: false,
+//   })
+//   .then(() => {
+//     app.listen(PORT, () => {
+//       console.log(`Server port: ${PORT}`);
+//     });
+//   })
+//   .catch((error) => {
+//     console.log(`server error: ${error}`);
+//   });
