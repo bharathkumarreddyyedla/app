@@ -6,6 +6,7 @@ import moment from "moment";
 import { billingDocumentCreate } from "./billingDocumentCreate.js";
 import { encounterDocumentCreate } from "./encounterDocumentCreate.js";
 import { invoiceDocumentCreate } from "./invoiceDocumentCreate.js";
+import { reportsDocumentCreate } from "./reportsDocumentCreate.js";
 
 pdfMake.vfs = vfs;
 
@@ -28,6 +29,16 @@ export const pdf = (payload) =>
               payload?.billingDetails,
               payload?.labDetails,
               payload?.serviceType
+            )
+          : payload?.type === "REPORTS_PDF"
+          ? reportsDocumentCreate(
+              payload?.clinicInfo,
+              payload?.selectedStartDate,
+              payload?.selectedEndDate,
+              payload?.list,
+              payload?.reportType,
+              payload?.totalAppointments,
+              payload?.totalRevenue
             )
           : encounterDocumentCreate(
               payload?.appointmentDetails,
