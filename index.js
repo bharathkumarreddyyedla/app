@@ -15,6 +15,8 @@ import notificationRoutes from "./src/routes/notificationRoutes.js";
 import favouriteRoutes from "./src/routes/favouriteRoutes.js";
 import passport from "passport";
 import cookieSession from "cookie-session";
+import http from "http";
+import initSignalingServer from "./src/services/signalingServer.js";
 // const  passportSetup = require("./src/utils/utils")
 
 // Configurations //
@@ -74,7 +76,9 @@ app.use("/favourite", favouriteRoutes);
 
 // MongoDb setup //
 const PORT = process.env.PORT || 6001;
-app.listen(PORT, () => {
+const server = http.createServer(app);
+initSignalingServer(server);
+server.listen(PORT, () => {
   console.log(`Server port: ${PORT}`);
 });
 // mongoose

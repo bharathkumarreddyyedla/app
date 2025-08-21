@@ -1,0 +1,12 @@
+ {
+    "dateLabel": "Follow Up patients Reports From {{startDate}} to {{endDate}}",
+    "to": "To",
+    "Patient": "Patient",
+    "Gender": "Gender",
+    "Age": "Age",
+    "genderValue": {
+        "Male": "Male",
+        "Female": "Female",
+        "Other": "Other"
+    }
+  }

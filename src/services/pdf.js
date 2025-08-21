@@ -7,13 +7,28 @@ import { billingDocumentCreate } from "./billingDocumentCreate.js";
 import { encounterDocumentCreate } from "./encounterDocumentCreate.js";
 import { invoiceDocumentCreate } from "./invoiceDocumentCreate.js";
 import { reportsDocumentCreate } from "./reportsDocumentCreate.js";
-
+import i18next from "./i18n.js";
 pdfMake.vfs = vfs;
-
+pdfMake.fonts = {
+  Telugu: {
+    normal: "NotoSansTelugu-Bold.ttf",
+    bold: "NotoSansTelugu-Bold.ttf",
+    italics: "NotoSansTelugu-Bold.ttf",
+    bolditalics: "NotoSansTelugu-Bold.ttf",
+  },
+  Roboto: {
+    normal: "Roboto-Regular.ttf",
+    bold: "Roboto-Medium.ttf",
+    italics: "Roboto-Italic.ttf",
+    bolditalics: "Roboto-MediumItalic.ttf",
+  },
+};
 export const pdf = (payload) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     try {
       console.log("payload?.type", payload?.type);
+      await i18next.changeLanguage(payload?.languageType || "en");
+      let language = payload?.languageType === "TEL" ? "Telugu" : "Roboto";
       let docDefinition =
         payload?.type === "BILL_PDF"
           ? billingDocumentCreate(
@@ -38,7 +53,8 @@ export const pdf = (payload) =>
               payload?.list,
               payload?.reportType,
               payload?.totalAppointments,
-              payload?.totalRevenue
+              payload?.totalRevenue,
+              payload?.languageType
             )
           : encounterDocumentCreate(
               payload?.appointmentDetails,
@@ -49,13 +65,13 @@ export const pdf = (payload) =>
               payload?.clinicDetails || {},
               payload?.addedCheifcomplaintsArray,
               payload?.prescription,
-              payload?.labOrder,
-              payload?.clinicalInvestigation,
-              payload?.radiologyOrder,
+              payload?.invetigationsList,
               payload?.diagnosis,
               payload?.followUp,
               payload?.referDoctorToPatient,
               payload?.otherInstructions,
+              payload?.doctorNotes,
+              payload?.isDoctorNotes,
               payload?.vitalsObject,
               payload?.allergies,
               payload?.currentMedications,
@@ -75,7 +91,19 @@ export const pdf = (payload) =>
               payload?.neuroVasString,
               payload?.muscuStirng,
               payload?.prescriptionPdfSettings,
-              payload?.personalSocailHistory
+              payload?.personalSocailHistory,
+              payload?.historyArray,
+              payload?.breakFast,
+              payload?.midMorningSnack,
+              payload?.lunch,
+              payload?.afternoonSnack,
+              payload?.dinner,
+              payload?.dietPlanAdditionalNotes,
+              payload?.fitnessPlan,
+              payload?.nutritionMealPlan,
+              payload?.groupedQuestionaryData,
+              payload?.prePostQuestionaryData,
+              language
             );
       pdfMake?.createPdf(docDefinition)?.getBase64((pdfData) => {
         if (pdfData) {

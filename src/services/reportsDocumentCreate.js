@@ -1,4 +1,6 @@
 import moment from "moment";
+import { translate } from "./commonFuctions.js";
+import i18next from "./i18n.js";
 
 export const reportsDocumentCreate = (
   clinicInfo = {},
@@ -7,8 +9,11 @@ export const reportsDocumentCreate = (
   list = [],
   reportType = "PATIENT",
   totalAppointments = 0,
-  totalRevenue = 0
+  totalRevenue = 0,
+  languageType = "en"
 ) => {
+  const language = languageType === "en" ? "Roboto" : "Telugu";
+
   let docDefinition = {};
   if (reportType === "PATIENT") {
     docDefinition = {
@@ -64,13 +69,14 @@ export const reportsDocumentCreate = (
           columns: [
             [
               {
-                text:
-                  "Follow Up patients Reports From " +
-                  moment(selectedStartDate).format("DD-MM-YYYY") +
-                  " To " +
-                  moment(selectedEndDate).format("DD-MM-YYYY"),
+                text: i18next.t("dateLabel", {
+                  startDate:
+                    moment(selectedStartDate).format("DD-MM-YYYY") || "",
+                  endDate: moment(selectedEndDate).format("DD-MM-YYYY") || "",
+                }),
                 fontSize: 12,
                 bold: true,
+                font: language,
                 alignment: "center",
               },
             ],
@@ -101,46 +107,36 @@ export const reportsDocumentCreate = (
                 //   bold: true
                 // },
                 {
-                  text: "Patient",
+                  text: i18next.t("Patient"),
                   fontSize: 10,
                   bold: true,
+                  font: language,
                 },
                 {
-                  text: "Gender",
+                  text: i18next.t("Gender"),
                   fontSize: 10,
                   bold: true,
+                  font: language,
                 },
                 {
-                  text: "Age",
+                  text: i18next.t("Age"),
                   fontSize: 10,
                   bold: true,
-                },
-                {
-                  text: "Doctor",
-                  fontSize: 10,
-                  bold: true,
-                },
-                {
-                  text: "Specialization",
-                  fontSize: 10,
-                  bold: true,
-                },
-                {
-                  text: "FollowUP",
-                  fontSize: 10,
-                  bold: true,
+                  font: language,
                 },
               ],
               ...list.map((el, i) => [
-                { text: el.patientName, fontSize: 9 },
-                { text: el.gender, fontSize: 9 },
+                { text: el.patientName, font: language, fontSize: 9 },
+                {
+                  text: i18next.t(`genderValue.${el.gender}`),
+                  font: language,
+                  fontSize: 9,
+                },
                 {
                   text: el.dob ? moment().diff(el.dob, "years").toString() : "",
                   fontSize: 9,
+                  font: language,
                 },
-                { text: el.doctorName, fontSize: 9 },
-                { text: el.specialization, fontSize: 9 },
-                { text: el.followupDate, fontSize: 9 },
               ]),
             ],
           },
