@@ -13,6 +13,7 @@ import plantRoutes from "./src/routes/plantRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
 import notificationRoutes from "./src/routes/notificationRoutes.js";
 import favouriteRoutes from "./src/routes/favouriteRoutes.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
 import passport from "passport";
 import cookieSession from "cookie-session";
 import http from "http";
@@ -67,6 +68,7 @@ app.use(allowCrossDomain);
 app.use("/assets", express.static(path.join(dirName, "public/assets")));
 
 // Routes //
+app.use("/ai", aiRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/plant", plantRoutes);

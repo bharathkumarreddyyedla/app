@@ -19,11 +19,11 @@ import admin from "firebase-admin";
 // const serviceAccount = require("./firabeConfig.json");
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const serviceAccount = require("./docsein-c4d49-firebase-adminsdk-bsx08-5b35accf10.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://docsein-c4d49-default-rtdb.firebaseio.com",
-});
+// const serviceAccount = require("./docsein-c4d49-firebase-adminsdk-bsx08-5b35accf10.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://docsein-c4d49-default-rtdb.firebaseio.com",
+// });
 export const expoPushNotification = async (req, res) => {
   try {
     await sendNotificationToExpo(req.body)
