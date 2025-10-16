@@ -98,3 +98,48 @@ Only output valid JSON — no explanations or markdown.
     res.status(500).json({ error: error.message });
   }
 };
+const buildPrompt = (payload) => {
+  return [
+    "You are a certified nutritionist. Compute a safe daily calorie target and summarize goal direction only.",
+    "Return STRICT JSON only (no markdown). The JSON must match:",
+    '{\n  "calorieTargetPerDay": number,\n  "goalType": "lose" | "gain" | "maintain",\n  "expectedWeeklyWeightChangeKg": number,\n  "estimatedTimeframeWeeks": number,\n  "macros": { "protein_g": number, "carbs_g": number, "fat_g": number },\n  "minerals_mg": { "sodium": number, "potassium": number, "calcium": number, "iron": number, "magnesium": number },\n  "rationale": string[]\n}',
+    "Guidance: infer TDEE and apply an appropriate deficit/surplus for the stated goal and speed; keep changes within safe ranges (≈0.25–1.0 kg/week unless user speed indicates otherwise). Avoid medical claims. Macros should be realistic and consistent with the calorie target.",
+    "User profile and goals (JSON):",
+    JSON.stringify(payload, null, 2),
+    "Output valid JSON only.",
+  ].join("\n\n");
+};
+export const generateDietPlan = async (req, res) => {
+  try {
+    const payload = req?.body || {};
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is not configured");
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const prompt = buildPrompt(payload);
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+
+    // Try to parse JSON from the response, even if it contains code fences
+    const jsonText = text.replace(/^```json\n?|```$/g, "").trim();
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (e) {
+      // Attempt to extract JSON block
+      const match = text.match(/\{[\s\S]*\}$/);
+      if (match) {
+        parsed = JSON.parse(match[0]);
+      } else {
+        throw new Error("Model did not return valid JSON");
+      }
+    }
+    res.status(200).json(parsed);
+  } catch (err) {
+    console.error("Error generating content:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
